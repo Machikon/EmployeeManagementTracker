@@ -1,7 +1,6 @@
 const inquirer = require('inquirer');
-const mysql = require('mysql');
-const createTable = require('console.table');
-
+const mysql = require('mysql2');
+const cTable = require('console.table');
 
 
 inquirer
@@ -9,8 +8,9 @@ inquirer
     {
       type: 'list',
       name: 'actions',
+      message: 'What would you like to do?',
       choices: ['view all departments', 'view all roles', 'view all employees', 'add a department', 'add a role', 'add an employee', 'update an employee role'],
-      message: 'What would you like to do?'
+      
     },
       ])
      .then(({actions}) => {
@@ -32,19 +32,22 @@ inquirer
         })
   
 function viewDepartments(){
-    db.query('SELECT * FROM departments', function (err, results){
+    db.query('SELECT * FROM departments', function (err, res){
+        if (err) throw err
         console.table(res);
         startPrompt();  
     })}
       
 function viewRoles(){
-    db.query('SELECT * FROM roles', function(err, results){
+    db.query('SELECT * FROM roles', function(err, res){
+        if (err) throw err
         console.table(res);
         startPrompt();
     })} 
 
 function viewEmployees(){
-    db.query('SELECT * FROM employees JOIN roles.department_id ON department.id, JOIN employee.role_id ON roles.id', function(err, results){
+    db.query('SELECT * FROM employees JOIN roles.department_id ON department.id, JOIN employee.role_id ON roles.id', function(err, res){
+        if (err) throw err
         console.table(res);
         startPrompt();
     })}
@@ -115,7 +118,7 @@ function addEmployee(){
         },
 
         ])
-    .then((response)=> {
+    .then((responseEmployee)=> {
             const newEmployee = new Employee(responseEmployee)
             Employee.push(responseEmployee);
         })}
@@ -141,8 +144,11 @@ function updateEmpoyeeRole(){
             message: 'Please select the new role for this emoloyee.',
         }
         
-])};
-
+    ])
+    .then((responseEmployeeRole)=> {
+        const newEmployee = new Employee(responseEmployeeRole)
+        Employee.push(responseEmployeeRole);}
+    )};
 
 
   
