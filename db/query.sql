@@ -1,9 +1,9 @@
-SELECT * FROM departments;
-SELECT * FROM roles;
-SELECT * FROM employees;
-JOIN roles.department_id ON departments.id,
-JOIN employees.role_id ON roles.id,
-JOIN employees.manager_id ON employees.id;
+SELECT * FROM department;
+SELECT * FROM role;
+SELECT * FROM employee;
+JOIN role.department_id ON department.id,
+JOIN employee.role_id ON role.id,
+JOIN employee.manager_id ON employee.id
 
 
 
